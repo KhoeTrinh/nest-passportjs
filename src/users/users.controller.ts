@@ -1,14 +1,20 @@
-import { Body, Controller, Post, UsePipes, ValidationPipe } from '@nestjs/common';
-import { UserLoginDto } from './userLogin.dto';
-import { UsersService } from './users.service';
+import { Controller, Get, Post, Req, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { LocalGuard } from './guards/local.guard';
+import { Request } from 'express';
+import { JwtGuard } from './guards/jwt.guard';
 
 @Controller('users')
 export class UsersController {
-    constructor(private userService: UsersService) {}
+    @Get('/status')
+    @UseGuards(JwtGuard)
+    status(@Req() req: Request) {
+        return req.user
+    }
 
     @Post('/login')
+    @UseGuards(LocalGuard)
     @UsePipes(new ValidationPipe())
-    login(@Body() data: UserLoginDto) {
-        return this.userService.createUser(data)
+    token(@Req() req: Request) {
+        return req.user
     }
 }

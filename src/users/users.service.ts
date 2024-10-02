@@ -12,7 +12,7 @@ const fakeUsers = [
 export class UsersService {
   constructor(private jwtService: JwtService) {}
 
-  createUser({ username, password }: UserLoginDto) {
+  createToken({ username, password }: UserLoginDto) {
     const user = fakeUsers.find((user) => user.username === username);
     if (!user) throw new HttpException('User not found', 404);
     if (password === user.password) {
